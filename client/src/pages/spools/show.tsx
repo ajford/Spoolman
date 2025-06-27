@@ -112,6 +112,17 @@ export const SpoolShow: React.FC<IResourceComponentsProps> = () => {
     }
     : record?.filament.color_hex;
 
+  const getMeasuredWeight = (): number => {
+    if (!record)
+      return 0;
+
+    const initialWeight = record.initial_weight ?? 0;
+    const spoolWeight = record.spool_weight ?? 0;
+    const usedWeight = record.used_weight ?? 0;
+
+    return  initialWeight + spoolWeight - usedWeight;
+  };
+
   return (
     <Show
       isLoading={isLoading}
@@ -209,6 +220,24 @@ export const SpoolShow: React.FC<IResourceComponentsProps> = () => {
           maximumFractionDigits: 1,
           minimumFractionDigits: 1,
         }}
+      />
+      <Title level={5}>{t("spool.fields.spool_weight")}</Title>
+      <NumberFieldUnit
+          value={record?.spool_weight ?? ""}
+          unit="g"
+          options={{
+            maximumFractionDigits: 1,
+            minimumFractionDigits: 1,
+          }}
+      />
+      <Title level={5}>{t("spool.fields.measured_weight")}</Title>
+      <NumberFieldUnit
+          value={getMeasuredWeight() ?? ""}
+          unit="g"
+          options={{
+            maximumFractionDigits: 1,
+            minimumFractionDigits: 1,
+          }}
       />
       <Title level={5}>{t("spool.fields.location")}</Title>
       <TextField value={record?.location} />
